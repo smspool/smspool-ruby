@@ -5,7 +5,7 @@ gitRepoId: smspool-ruby
 additionalProperties:
   gemName: smspool
   moduleName: SMSPool
-  gemVersion: 0.1.0
+  gemVersion: 0.1.1
   gemAuthor: SMSPool
   gemHomepage: https://github.com/smspool/smspool-ruby
   gemSummary: Ruby client for the SMSPool API
