@@ -1,0 +1,13 @@
+generatorName: ruby
+gitHost: github.com
+gitUserId: smspool
+gitRepoId: smspool-ruby
+additionalProperties:
+  gemName: smspool
+  moduleName: SMSPool
+  gemVersion: 0.1.0
+  gemAuthor: SMSPool
+  gemHomepage: https://github.com/smspool/smspool-ruby
+  gemSummary: Ruby client for the SMSPool API
+  gemDescription: Official Ruby client for the SMSPool API (https://api.smspool.net/docs).
+  gemLicense: MIT
