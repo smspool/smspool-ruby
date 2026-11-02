@@ -11,6 +11,7 @@ All URIs are relative to *https://api.smspool.net*
 | [**request_history**](SMSApi.md#request_history) | **POST** /request/history | Order History |
 | [**sms_activate**](SMSApi.md#sms_activate) | **POST** /sms/activate | Activate SMS |
 | [**sms_all_stock**](SMSApi.md#sms_all_stock) | **POST** /sms/all_stock | One-time stock for all services |
+| [**sms_archive**](SMSApi.md#sms_archive) | **POST** /sms/archive | Archive |
 | [**sms_cancel**](SMSApi.md#sms_cancel) | **POST** /sms/cancel | Cancel SMS |
 | [**sms_cancel_all**](SMSApi.md#sms_cancel_all) | **POST** /sms/cancel_all | Cancel All SMS |
 | [**sms_check**](SMSApi.md#sms_check) | **POST** /sms/check | Check SMS |
@@ -521,6 +522,75 @@ end
 ### Authorization
 
 No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/x-www-form-urlencoded
+- **Accept**: application/json
+
+
+## sms_archive
+
+> Object sms_archive(orderid)
+
+Archive
+
+_Not documented yet: the parameters below come straight from the code._
+
+### Examples
+
+```ruby
+require 'time'
+require 'smspool'
+# setup authorization
+SMSPool.configure do |config|
+  # Configure Bearer authorization: bearerAuth
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = SMSPool::SMSApi.new
+orderid = 'orderid_example' # String | 
+
+begin
+  # Archive
+  result = api_instance.sms_archive(orderid)
+  p result
+rescue SMSPool::ApiError => e
+  puts "Error when calling SMSApi->sms_archive: #{e}"
+end
+```
+
+#### Using the sms_archive_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(Object, Integer, Hash)> sms_archive_with_http_info(orderid)
+
+```ruby
+begin
+  # Archive
+  data, status_code, headers = api_instance.sms_archive_with_http_info(orderid)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => Object
+rescue SMSPool::ApiError => e
+  puts "Error when calling SMSApi->sms_archive_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **orderid** | **String** |  |  |
+
+### Return type
+
+**Object**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

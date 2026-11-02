@@ -4,7 +4,6 @@ Gemfile
 Rakefile
 docs/BusinessApi.md
 docs/CarrierApi.md
-docs/ESIMsApi.md
 docs/InformationApi.md
 docs/PreordersApi.md
 docs/PricingApi.md
@@ -14,7 +13,6 @@ docs/VoucherApi.md
 lib/smspool.rb
 lib/smspool/api/business_api.rb
 lib/smspool/api/carrier_api.rb
-lib/smspool/api/esims_api.rb
 lib/smspool/api/information_api.rb
 lib/smspool/api/preorders_api.rb
 lib/smspool/api/pricing_api.rb

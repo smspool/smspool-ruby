@@ -8,6 +8,7 @@ All URIs are relative to *https://api.smspool.net*
 | [**pool_retrieve_all**](InformationApi.md#pool_retrieve_all) | **POST** /pool/retrieve_all | Pool list |
 | [**pool_retrieve_valid**](InformationApi.md#pool_retrieve_valid) | **POST** /pool/retrieve_valid | Suggested Pools |
 | [**request_balance**](InformationApi.md#request_balance) | **POST** /request/balance | Balance |
+| [**request_history_search**](InformationApi.md#request_history_search) | **POST** /request/history_search | History search |
 | [**request_success_rate**](InformationApi.md#request_success_rate) | **POST** /request/success_rate | Retrieve country success rates per service |
 | [**request_suggested_countries**](InformationApi.md#request_suggested_countries) | **POST** /request/suggested_countries | Suggested Countries |
 | [**service_retrieve_all**](InformationApi.md#service_retrieve_all) | **GET** /service/retrieve_all | Service list |
@@ -275,6 +276,81 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+
+## request_history_search
+
+> Object request_history_search(search, opts)
+
+History search
+
+_Not documented yet: the parameters below come straight from the code._
+
+### Examples
+
+```ruby
+require 'time'
+require 'smspool'
+# setup authorization
+SMSPool.configure do |config|
+  # Configure Bearer authorization: bearerAuth
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = SMSPool::InformationApi.new
+search = 'search_example' # String | 
+opts = {
+  cursor: 'cursor_example', # String | 
+  limit: 56 # Integer | 
+}
+
+begin
+  # History search
+  result = api_instance.request_history_search(search, opts)
+  p result
+rescue SMSPool::ApiError => e
+  puts "Error when calling InformationApi->request_history_search: #{e}"
+end
+```
+
+#### Using the request_history_search_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(Object, Integer, Hash)> request_history_search_with_http_info(search, opts)
+
+```ruby
+begin
+  # History search
+  data, status_code, headers = api_instance.request_history_search_with_http_info(search, opts)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => Object
+rescue SMSPool::ApiError => e
+  puts "Error when calling InformationApi->request_history_search_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **search** | **String** |  |  |
+| **cursor** | **String** |  | [optional] |
+| **limit** | **Integer** |  | [optional] |
+
+### Return type
+
+**Object**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/x-www-form-urlencoded
 - **Accept**: application/json
 
 
