@@ -218,6 +218,78 @@ module SMSPool
       return data, status_code, headers
     end
 
+    # Pick the best country for a service
+    # Returns the country SMSPool would order from for this service when you do not want to choose one (the quick order's \"Pick for me\"). It sends an HTTP POST request to the URL `https://api.smspool.net/request/auto_country`.  Every country with stock is scored on its measured success rate (a country with no order history displays 100% but has nothing to back it up, so it is left out unless no measured country has stock), weighed down when little stock backs it, minus a little per dollar, plus a bonus when it matches the country your request's IP resolves to (a local number verifies more often). The IP country is only used for that comparison; it is neither stored nor returned. Ties go to more stock, then the lower price. With `pricing_option=1` the cheapest country within reach of the best score wins instead.  Send `auto_country=1` to `/purchase/sms` to order with the same choice in one call.
+    # @param service [String] Service name or service ID which can be retrieved at the /service/retrieve_all endpoint
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :pricing_option Set to 1 to prefer the cheapest country among those close to the best score; 0 (default) picks purely on the score.
+    # @return [Object]
+    def request_auto_country(service, opts = {})
+      data, _status_code, _headers = request_auto_country_with_http_info(service, opts)
+      data
+    end
+
+    # Pick the best country for a service
+    # Returns the country SMSPool would order from for this service when you do not want to choose one (the quick order&#39;s \&quot;Pick for me\&quot;). It sends an HTTP POST request to the URL &#x60;https://api.smspool.net/request/auto_country&#x60;.  Every country with stock is scored on its measured success rate (a country with no order history displays 100% but has nothing to back it up, so it is left out unless no measured country has stock), weighed down when little stock backs it, minus a little per dollar, plus a bonus when it matches the country your request&#39;s IP resolves to (a local number verifies more often). The IP country is only used for that comparison; it is neither stored nor returned. Ties go to more stock, then the lower price. With &#x60;pricing_option&#x3D;1&#x60; the cheapest country within reach of the best score wins instead.  Send &#x60;auto_country&#x3D;1&#x60; to &#x60;/purchase/sms&#x60; to order with the same choice in one call.
+    # @param service [String] Service name or service ID which can be retrieved at the /service/retrieve_all endpoint
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :pricing_option Set to 1 to prefer the cheapest country among those close to the best score; 0 (default) picks purely on the score.
+    # @return [Array<(Object, Integer, Hash)>] Object data, response status code and response headers
+    def request_auto_country_with_http_info(service, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: InformationApi.request_auto_country ...'
+      end
+      # verify the required parameter 'service' is set
+      if @api_client.config.client_side_validation && service.nil?
+        fail ArgumentError, "Missing the required parameter 'service' when calling InformationApi.request_auto_country"
+      end
+      # resource path
+      local_var_path = '/request/auto_country'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/x-www-form-urlencoded'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+      form_params['service'] = service
+      form_params['pricing_option'] = opts[:'pricing_option'] if !opts[:'pricing_option'].nil?
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'Object'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || []
+
+      new_options = opts.merge(
+        :operation => :"InformationApi.request_auto_country",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: InformationApi#request_auto_country\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Balance
     # This HTTP POST request is used to retrieve the balance for a specific SMSPool. The request is sent to the URL `https://api.smspool.net/request/balance`.  ### Request Parameters  This request require the \\`key\\` param which is your API key  ### Response  The response to this request will have a status code of 200 if the request is successful. The response body will be in JSON format and will include a `balance` field. However, the last execution of this request returned an empty string for the `balance` field.  Please note that the actual value of the `balance` field may vary depending on the user and its configuration.
     # @param [Hash] opts the optional parameters
@@ -271,6 +343,81 @@ module SMSPool
       data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: InformationApi#request_balance\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # History search
+    # _Not documented yet: the parameters below come straight from the code._
+    # @param search [String] 
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :cursor 
+    # @option opts [Integer] :limit 
+    # @return [Object]
+    def request_history_search(search, opts = {})
+      data, _status_code, _headers = request_history_search_with_http_info(search, opts)
+      data
+    end
+
+    # History search
+    # _Not documented yet: the parameters below come straight from the code._
+    # @param search [String] 
+    # @param [Hash] opts the optional parameters
+    # @option opts [String] :cursor 
+    # @option opts [Integer] :limit 
+    # @return [Array<(Object, Integer, Hash)>] Object data, response status code and response headers
+    def request_history_search_with_http_info(search, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: InformationApi.request_history_search ...'
+      end
+      # verify the required parameter 'search' is set
+      if @api_client.config.client_side_validation && search.nil?
+        fail ArgumentError, "Missing the required parameter 'search' when calling InformationApi.request_history_search"
+      end
+      # resource path
+      local_var_path = '/request/history_search'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/x-www-form-urlencoded'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+      form_params['search'] = search
+      form_params['cursor'] = opts[:'cursor'] if !opts[:'cursor'].nil?
+      form_params['limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'Object'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"InformationApi.request_history_search",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: InformationApi#request_history_search\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
