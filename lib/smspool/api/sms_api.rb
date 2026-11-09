@@ -33,6 +33,7 @@ module SMSPool
     # @option opts [String] :activation_type Options: SMS, VOICE, FLASH. SMS will receive regular SMS, VOICE will receive phone calls that mentions the SMS and FLASH is for FLASH calls for verification.
     # @option opts [Integer] :carrier Options: 1 or 2. Pick a carrier (only works for pool Foxtrot US)
     # @option opts [Integer] :phonenumber In case you want to select a specific phone number to order
+    # @option opts [Integer] :auto_country Set to 1 to let SMSPool pick the country: every country with stock is scored on its measured success rate (weighed down when little stock backs it, minus a little per dollar; countries with no order history are left out unless nothing else has stock) with a bonus for a local number, the country your request&#39;s IP resolves to; with pricing_option&#x3D;1 the cheapest country close to the best score wins. Ignored when country is sent. The response then carries auto_country with the chosen country and the reason.
     # @option opts [Integer] :software 
     # @return [Object]
     def purchase_sms(service, opts = {})
@@ -54,6 +55,7 @@ module SMSPool
     # @option opts [String] :activation_type Options: SMS, VOICE, FLASH. SMS will receive regular SMS, VOICE will receive phone calls that mentions the SMS and FLASH is for FLASH calls for verification.
     # @option opts [Integer] :carrier Options: 1 or 2. Pick a carrier (only works for pool Foxtrot US)
     # @option opts [Integer] :phonenumber In case you want to select a specific phone number to order
+    # @option opts [Integer] :auto_country Set to 1 to let SMSPool pick the country: every country with stock is scored on its measured success rate (weighed down when little stock backs it, minus a little per dollar; countries with no order history are left out unless nothing else has stock) with a bonus for a local number, the country your request&#39;s IP resolves to; with pricing_option&#x3D;1 the cheapest country close to the best score wins. Ignored when country is sent. The response then carries auto_country with the chosen country and the reason.
     # @option opts [Integer] :software 
     # @return [Array<(Object, Integer, Hash)>] Object data, response status code and response headers
     def purchase_sms_with_http_info(service, opts = {})
@@ -94,6 +96,7 @@ module SMSPool
       form_params['activation_type'] = opts[:'activation_type'] if !opts[:'activation_type'].nil?
       form_params['carrier'] = opts[:'carrier'] if !opts[:'carrier'].nil?
       form_params['phonenumber'] = opts[:'phonenumber'] if !opts[:'phonenumber'].nil?
+      form_params['auto_country'] = opts[:'auto_country'] if !opts[:'auto_country'].nil?
       form_params['software'] = opts[:'software'] if !opts[:'software'].nil?
 
       # http body (model)
@@ -298,7 +301,7 @@ module SMSPool
       return_type = opts[:debug_return_type] || 'Object'
 
       # auth_names
-      auth_names = opts[:debug_auth_names] || []
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
 
       new_options = opts.merge(
         :operation => :"SMSApi.request_areacodes",
@@ -524,6 +527,75 @@ module SMSPool
       data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: SMSApi#sms_all_stock\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Archive
+    # _Not documented yet: the parameters below come straight from the code._
+    # @param orderid [String] 
+    # @param [Hash] opts the optional parameters
+    # @return [Object]
+    def sms_archive(orderid, opts = {})
+      data, _status_code, _headers = sms_archive_with_http_info(orderid, opts)
+      data
+    end
+
+    # Archive
+    # _Not documented yet: the parameters below come straight from the code._
+    # @param orderid [String] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(Object, Integer, Hash)>] Object data, response status code and response headers
+    def sms_archive_with_http_info(orderid, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: SMSApi.sms_archive ...'
+      end
+      # verify the required parameter 'orderid' is set
+      if @api_client.config.client_side_validation && orderid.nil?
+        fail ArgumentError, "Missing the required parameter 'orderid' when calling SMSApi.sms_archive"
+      end
+      # resource path
+      local_var_path = '/sms/archive'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/x-www-form-urlencoded'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+      form_params['orderid'] = orderid
+
+      # http body (model)
+      post_body = opts[:debug_body]
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'Object'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['bearerAuth']
+
+      new_options = opts.merge(
+        :operation => :"SMSApi.sms_archive",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: SMSApi#sms_archive\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end
@@ -855,7 +927,7 @@ module SMSPool
     end
 
     # Missed SMS
-    # Some messages arrive on a number from your one-time orders but cannot finish the order, such as Ticketmaster and Seated codes or Hark reward payouts. This returns those messages, the same ones the Missed SMS tool on the website shows. Only numbers from pool Foxtrot are covered.  The newest messages come first. `url`, `code` and `email` hold the first link, code and email address found in the message, or an empty string.
+    # Some messages arrive on a number from your one-time orders but cannot finish the order, such as Ticketmaster and Seated codes, Hark reward payouts or Neon Money Talks messages. This returns those messages, the same ones the Missed SMS tool on the website shows. Only numbers from pool Foxtrot are covered.  The newest messages come first. `url`, `code` and `email` hold the first link, code and email address found in the message, or an empty string.
     # @param [Hash] opts the optional parameters
     # @option opts [Integer] :phonenumber Only return messages for this number, including the country code. Leave it out for all your numbers.
     # @option opts [Integer] :limit Maximum number of messages. Defaults to 100, at most 500.
@@ -866,7 +938,7 @@ module SMSPool
     end
 
     # Missed SMS
-    # Some messages arrive on a number from your one-time orders but cannot finish the order, such as Ticketmaster and Seated codes or Hark reward payouts. This returns those messages, the same ones the Missed SMS tool on the website shows. Only numbers from pool Foxtrot are covered.  The newest messages come first. &#x60;url&#x60;, &#x60;code&#x60; and &#x60;email&#x60; hold the first link, code and email address found in the message, or an empty string.
+    # Some messages arrive on a number from your one-time orders but cannot finish the order, such as Ticketmaster and Seated codes, Hark reward payouts or Neon Money Talks messages. This returns those messages, the same ones the Missed SMS tool on the website shows. Only numbers from pool Foxtrot are covered.  The newest messages come first. &#x60;url&#x60;, &#x60;code&#x60; and &#x60;email&#x60; hold the first link, code and email address found in the message, or an empty string.
     # @param [Hash] opts the optional parameters
     # @option opts [Integer] :phonenumber Only return messages for this number, including the country code. Leave it out for all your numbers.
     # @option opts [Integer] :limit Maximum number of messages. Defaults to 100, at most 500.

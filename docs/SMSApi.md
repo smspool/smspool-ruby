@@ -11,6 +11,7 @@ All URIs are relative to *https://api.smspool.net*
 | [**request_history**](SMSApi.md#request_history) | **POST** /request/history | Order History |
 | [**sms_activate**](SMSApi.md#sms_activate) | **POST** /sms/activate | Activate SMS |
 | [**sms_all_stock**](SMSApi.md#sms_all_stock) | **POST** /sms/all_stock | One-time stock for all services |
+| [**sms_archive**](SMSApi.md#sms_archive) | **POST** /sms/archive | Archive |
 | [**sms_cancel**](SMSApi.md#sms_cancel) | **POST** /sms/cancel | Cancel SMS |
 | [**sms_cancel_all**](SMSApi.md#sms_cancel_all) | **POST** /sms/cancel_all | Cancel All SMS |
 | [**sms_check**](SMSApi.md#sms_check) | **POST** /sms/check | Check SMS |
@@ -54,6 +55,7 @@ opts = {
   activation_type: 'activation_type_example', # String | Options: SMS, VOICE, FLASH. SMS will receive regular SMS, VOICE will receive phone calls that mentions the SMS and FLASH is for FLASH calls for verification.
   carrier: 56, # Integer | Options: 1 or 2. Pick a carrier (only works for pool Foxtrot US)
   phonenumber: 56, # Integer | In case you want to select a specific phone number to order
+  auto_country: 56, # Integer | Set to 1 to let SMSPool pick the country: every country with stock is scored on its measured success rate (weighed down when little stock backs it, minus a little per dollar; countries with no order history are left out unless nothing else has stock) with a bonus for a local number, the country your request's IP resolves to; with pricing_option=1 the cheapest country close to the best score wins. Ignored when country is sent. The response then carries auto_country with the chosen country and the reason.
   software: 56 # Integer | 
 }
 
@@ -100,6 +102,7 @@ end
 | **activation_type** | **String** | Options: SMS, VOICE, FLASH. SMS will receive regular SMS, VOICE will receive phone calls that mentions the SMS and FLASH is for FLASH calls for verification. | [optional] |
 | **carrier** | **Integer** | Options: 1 or 2. Pick a carrier (only works for pool Foxtrot US) | [optional] |
 | **phonenumber** | **Integer** | In case you want to select a specific phone number to order | [optional] |
+| **auto_country** | **Integer** | Set to 1 to let SMSPool pick the country: every country with stock is scored on its measured success rate (weighed down when little stock backs it, minus a little per dollar; countries with no order history are left out unless nothing else has stock) with a bonus for a local number, the country your request&#39;s IP resolves to; with pricing_option&#x3D;1 the cheapest country close to the best score wins. Ignored when country is sent. The response then carries auto_country with the chosen country and the reason. | [optional] |
 | **software** | **Integer** |  | [optional] |
 
 ### Return type
@@ -259,6 +262,11 @@ Request available areacodes
 ```ruby
 require 'time'
 require 'smspool'
+# setup authorization
+SMSPool.configure do |config|
+  # Configure Bearer authorization: bearerAuth
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
 
 api_instance = SMSPool::SMSApi.new
 service = 'service_example' # String | The service or number retrieved from the `Service List` endpoint
@@ -306,7 +314,7 @@ end
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -521,6 +529,75 @@ end
 ### Authorization
 
 No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/x-www-form-urlencoded
+- **Accept**: application/json
+
+
+## sms_archive
+
+> Object sms_archive(orderid)
+
+Archive
+
+_Not documented yet: the parameters below come straight from the code._
+
+### Examples
+
+```ruby
+require 'time'
+require 'smspool'
+# setup authorization
+SMSPool.configure do |config|
+  # Configure Bearer authorization: bearerAuth
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
+
+api_instance = SMSPool::SMSApi.new
+orderid = 'orderid_example' # String | 
+
+begin
+  # Archive
+  result = api_instance.sms_archive(orderid)
+  p result
+rescue SMSPool::ApiError => e
+  puts "Error when calling SMSApi->sms_archive: #{e}"
+end
+```
+
+#### Using the sms_archive_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(Object, Integer, Hash)> sms_archive_with_http_info(orderid)
+
+```ruby
+begin
+  # Archive
+  data, status_code, headers = api_instance.sms_archive_with_http_info(orderid)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => Object
+rescue SMSPool::ApiError => e
+  puts "Error when calling SMSApi->sms_archive_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **orderid** | **String** |  |  |
+
+### Return type
+
+**Object**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -881,7 +958,7 @@ This endpoint does not need any parameter.
 
 Missed SMS
 
-Some messages arrive on a number from your one-time orders but cannot finish the order, such as Ticketmaster and Seated codes or Hark reward payouts. This returns those messages, the same ones the Missed SMS tool on the website shows. Only numbers from pool Foxtrot are covered.  The newest messages come first. `url`, `code` and `email` hold the first link, code and email address found in the message, or an empty string.
+Some messages arrive on a number from your one-time orders but cannot finish the order, such as Ticketmaster and Seated codes, Hark reward payouts or Neon Money Talks messages. This returns those messages, the same ones the Missed SMS tool on the website shows. Only numbers from pool Foxtrot are covered.  The newest messages come first. `url`, `code` and `email` hold the first link, code and email address found in the message, or an empty string.
 
 ### Examples
 

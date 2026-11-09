@@ -1050,6 +1050,11 @@ Retrieve Rental Stock
 ```ruby
 require 'time'
 require 'smspool'
+# setup authorization
+SMSPool.configure do |config|
+  # Configure Bearer authorization: bearerAuth
+  config.access_token = 'YOUR_BEARER_TOKEN'
+end
 
 api_instance = SMSPool::RentalApi.new
 id = 56 # Integer | The rental ID retrieved from `Retrieve Rental IDs`
@@ -1099,7 +1104,7 @@ end
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

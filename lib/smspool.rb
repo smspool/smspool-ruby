@@ -22,7 +22,6 @@ require 'smspool/configuration'
 # APIs
 require 'smspool/api/business_api'
 require 'smspool/api/carrier_api'
-require 'smspool/api/esims_api'
 require 'smspool/api/information_api'
 require 'smspool/api/preorders_api'
 require 'smspool/api/pricing_api'
